@@ -36,6 +36,15 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/verify", request.url))
     }
 
+    // Redirect to the appropriate dashboard after login
+    if (pathname === "/auth") {
+      if (decoded.role === "admin") {
+        return NextResponse.redirect(new URL("/admin", request.url))
+      } else {
+        return NextResponse.redirect(new URL("/verify", request.url))
+      }
+    }
+
     return NextResponse.next()
   } catch (error) {
     // Invalid token, redirect to auth
@@ -44,5 +53,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/verify/:path*"],
+  matcher: ["/admin/:path*", "/verify/:path*", "/auth"],
 }
