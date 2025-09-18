@@ -8,7 +8,7 @@ import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "CertValidator - Academic Certificate Authenticity Validator",
+  title: "EasyAuth - Secure Authentication Platform",
   description: "Secure verification of academic credentials using advanced OCR technology",
   generator: "v0.app",
 }

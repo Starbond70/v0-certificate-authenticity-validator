@@ -18,7 +18,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Shield className="h-8 w-8" />
-            <h1 className="text-xl font-bold">CertValidator</h1>
+            <h1 className="text-xl font-bold">EasyAuth</h1>
           </div>
           <nav className="flex items-center space-x-6">
             <Link href="/auth" className="hover:text-accent transition-colors">
@@ -40,16 +40,16 @@ export default function HomePage() {
       >
         <div className="container mx-auto text-center">
           <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6 text-balance">
-            Academic Certificate
-            <span className="text-primary block">Authenticity Validator</span>
+            Secure Authentication
+            <span className="text-primary block">Made Easy</span>
           </h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty">
-            Secure, reliable, and instant verification of academic credentials using advanced OCR technology and
-            blockchain-ready hashing.
+            Secure, reliable, and instant authentication solutions using advanced verification technology and
+            blockchain-ready security.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" asChild>
-              <Link href="/verify">Verify Certificate</Link>
+              <Link href="/verify">Verify Identity</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
               <Link href="/admin">Admin Dashboard</Link>
@@ -66,7 +66,7 @@ export default function HomePage() {
         className="py-16 px-4 bg-muted/30"
       >
         <div className="container mx-auto">
-          <h3 className="text-3xl font-bold text-center mb-12 text-foreground">Why Choose CertValidator?</h3>
+          <h3 className="text-3xl font-bold text-center mb-12 text-foreground">Why Choose EasyAuth?</h3>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="text-center">
               <CardHeader>
@@ -75,7 +75,7 @@ export default function HomePage() {
               </CardHeader>
               <CardContent>
                 <CardDescription>
-                  Powered by Tesseract OCR and LayoutLMv3 for accurate field extraction from certificates
+                  Powered by advanced OCR and AI for accurate document verification and field extraction
                 </CardDescription>
               </CardContent>
             </Card>
@@ -110,7 +110,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="bg-primary text-primary-foreground py-8 px-4">
         <div className="container mx-auto text-center">
-          <p className="text-sm opacity-80">© 2024 CertValidator. Secure academic credential verification.</p>
+          <p className="text-sm opacity-80">© 2024 EasyAuth. Secure authentication solutions.</p>
         </div>
       </footer>
     </div>

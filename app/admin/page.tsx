@@ -146,7 +146,7 @@ export default function AdminDashboard() {
           <div className="flex items-center space-x-2">
             <Shield className="h-8 w-8" />
             <div>
-              <h1 className="text-xl font-bold">CertValidator Admin</h1>
+              <h1 className="text-xl font-bold">EasyAuth Admin</h1>
               <p className="text-sm opacity-80">Welcome, {user.name}</p>
             </div>
           </div>
@@ -170,8 +170,8 @@ export default function AdminDashboard() {
         >
           <Tabs defaultValue="upload" className="space-y-6">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="upload">Upload Certificate</TabsTrigger>
-              <TabsTrigger value="manage">Manage Certificates</TabsTrigger>
+              <TabsTrigger value="upload">Upload Document</TabsTrigger>
+              <TabsTrigger value="manage">Manage Documents</TabsTrigger>
             </TabsList>
 
             <TabsContent value="upload" className="space-y-6">
@@ -180,13 +180,13 @@ export default function AdminDashboard() {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <Upload className="h-5 w-5 mr-2" />
-                    Upload New Certificate
+                    Upload New Document
                   </CardTitle>
                   <CardDescription>Upload PDF or image files for OCR processing and verification</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="space-y-2">
-                    <Label htmlFor="certificate-file">Select Certificate File</Label>
+                    <Label htmlFor="certificate-file">Select Document File</Label>
                     <Input
                       id="certificate-file"
                       type="file"
@@ -224,7 +224,7 @@ export default function AdminDashboard() {
                   )}
 
                   <Button onClick={handleUpload} disabled={!selectedFile || isUploading} className="w-full">
-                    {isUploading ? "Processing..." : "Upload & Process Certificate"}
+                    {isUploading ? "Processing..." : "Upload & Process Document"}
                   </Button>
                 </CardContent>
               </Card>
@@ -233,7 +233,7 @@ export default function AdminDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle>Processing Pipeline</CardTitle>
-                  <CardDescription>How your certificates are processed</CardDescription>
+                  <CardDescription>How your documents are processed</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid md:grid-cols-3 gap-4">
@@ -270,7 +270,7 @@ export default function AdminDashboard() {
                   <div className="flex flex-col sm:flex-row gap-4">
                     <div className="relative flex-1">
                       <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input placeholder="Search certificates..." className="pl-10" />
+                      <Input placeholder="Search documents..." className="pl-10" />
                     </div>
                     <Button variant="outline">Filter by Status</Button>
                   </div>

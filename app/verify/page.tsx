@@ -203,7 +203,7 @@ export default function VerifyPage() {
           <div className="flex items-center space-x-2">
             <Shield className="h-8 w-8" />
             <div>
-              <h1 className="text-xl font-bold">Certificate Verification</h1>
+              <h1 className="text-xl font-bold">Document Verification</h1>
               <p className="text-sm opacity-80">Welcome, {user.name}</p>
             </div>
           </div>
@@ -232,7 +232,7 @@ export default function VerifyPage() {
         >
           <Tabs defaultValue="verify" className="space-y-6">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="verify">Verify Certificate</TabsTrigger>
+              <TabsTrigger value="verify">Verify Document</TabsTrigger>
               <TabsTrigger value="search">Search by ID</TabsTrigger>
               <TabsTrigger value="history">Verification History</TabsTrigger>
             </TabsList>
@@ -243,15 +243,15 @@ export default function VerifyPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <Upload className="h-5 w-5 mr-2" />
-                    Upload Certificate for Verification
+                    Upload Document for Verification
                   </CardTitle>
                   <CardDescription>
-                    Upload your certificate to verify its authenticity using our advanced OCR system
+                    Upload your document to verify its authenticity using our advanced OCR system
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="space-y-2">
-                    <Label htmlFor="certificate-file">Select Certificate File</Label>
+                    <Label htmlFor="certificate-file">Select Document File</Label>
                     <Input
                       id="certificate-file"
                       type="file"
@@ -281,18 +281,18 @@ export default function VerifyPage() {
                   {isUploading && (
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span>Processing certificate...</span>
+                        <span>Processing document...</span>
                         <span>{uploadProgress}%</span>
                       </div>
                       <Progress value={uploadProgress} />
                       <p className="text-xs text-muted-foreground">
-                        Running OCR analysis and extracting certificate data...
+                        Running OCR analysis and extracting document data...
                       </p>
                     </div>
                   )}
 
                   <Button onClick={handleVerification} disabled={!selectedFile || isUploading} className="w-full">
-                    {isUploading ? "Verifying..." : "Verify Certificate"}
+                    {isUploading ? "Verifying..." : "Verify Document"}
                   </Button>
                 </CardContent>
               </Card>
@@ -320,7 +320,7 @@ export default function VerifyPage() {
                         {getStatusBadge(currentResult.status)}
                       </div>
                       <CardDescription>
-                        Certificate: {currentResult.fileName} • Verified on {currentResult.verificationDate}
+                        Document: {currentResult.fileName} • Verified on {currentResult.verificationDate}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -333,7 +333,7 @@ export default function VerifyPage() {
 
                       {currentResult.extractedData && (
                         <div className="space-y-4">
-                          <h4 className="font-semibold text-lg">Extracted Certificate Data</h4>
+                          <h4 className="font-semibold text-lg">Extracted Document Data</h4>
                           <div className="grid md:grid-cols-2 gap-4">
                             <div className="flex items-center space-x-3 p-3 bg-background rounded-lg">
                               <User className="h-5 w-5 text-primary" />
@@ -352,7 +352,7 @@ export default function VerifyPage() {
                             <div className="flex items-center space-x-3 p-3 bg-background rounded-lg">
                               <Award className="h-5 w-5 text-primary" />
                               <div>
-                                <p className="text-sm text-muted-foreground">Certificate ID</p>
+                                <p className="text-sm text-muted-foreground">Document ID</p>
                                 <p className="font-medium">{currentResult.extractedData.certificateId}</p>
                               </div>
                             </div>
@@ -402,22 +402,22 @@ export default function VerifyPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <Search className="h-5 w-5 mr-2" />
-                    Search by Certificate ID
+                    Search by Document ID
                   </CardTitle>
-                  <CardDescription>Enter a certificate ID to verify if it exists in our database</CardDescription>
+                  <CardDescription>Enter a document ID to verify if it exists in our database</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="search-id">Certificate ID</Label>
+                    <Label htmlFor="search-id">Document ID</Label>
                     <Input
                       id="search-id"
-                      placeholder="Enter certificate ID (e.g., CERT-2024-001)"
+                      placeholder="Enter document ID (e.g., CERT-2024-001)"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </div>
                   <Button onClick={handleSearchVerification} className="w-full">
-                    Search Certificate
+                    Search Document
                   </Button>
                 </CardContent>
               </Card>
@@ -427,7 +427,7 @@ export default function VerifyPage() {
               <Card>
                 <CardHeader>
                   <CardTitle>Verification History</CardTitle>
-                  <CardDescription>Your recent certificate verifications</CardDescription>
+                  <CardDescription>Your recent document verifications</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">

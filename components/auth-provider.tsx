@@ -24,7 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Check for existing session on mount
-    const savedUser = localStorage.getItem("cert-validator-user")
+    const savedUser = localStorage.getItem("easyauth-user")
     if (savedUser) {
       setUser(JSON.parse(savedUser))
     }
@@ -45,13 +45,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     setUser(mockUser)
-    localStorage.setItem("cert-validator-user", JSON.stringify(mockUser))
+    localStorage.setItem("easyauth-user", JSON.stringify(mockUser))
     setIsLoading(false)
   }
 
   const logout = () => {
     setUser(null)
-    localStorage.removeItem("cert-validator-user")
+    localStorage.removeItem("easyauth-user")
   }
 
   return <AuthContext.Provider value={{ user, login, logout, isLoading }}>{children}</AuthContext.Provider>

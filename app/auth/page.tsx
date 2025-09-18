@@ -57,9 +57,9 @@ export default function AuthPage() {
           </Link>
           <div className="flex items-center justify-center mb-4">
             <Shield className="h-8 w-8 text-primary mr-2" />
-            <h1 className="text-2xl font-bold text-foreground">CertValidator</h1>
+            <h1 className="text-2xl font-bold text-foreground">EasyAuth</h1>
           </div>
-          <p className="text-muted-foreground">Access your account to verify certificates</p>
+          <p className="text-muted-foreground">Access your account to verify documents</p>
         </div>
 
         <Card>

@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated color palette to navy-blue and white theme for academic certificate validator */
+  /* Updated color palette to navy-blue and white theme for EasyAuth authentication platform */
   --background: oklch(1 0 0); /* White background */
   --foreground: oklch(0.15 0.02 258.34); /* Navy blue text */
   --card: oklch(0.98 0.005 258.34); /* Light grey card background */
