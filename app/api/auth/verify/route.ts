@@ -16,12 +16,33 @@ export async function GET(request: NextRequest) {
     // Verify token
     const decoded = jwt.verify(token, JWT_SECRET) as any
 
+    const users = [
+      {
+        id: "1",
+        email: "admin@easyauth.com",
+        name: "Admin User",
+        role: "admin",
+      },
+      {
+        id: "2",
+        email: "user@easyauth.com",
+        name: "John Doe",
+        role: "verifier",
+      },
+    ]
+
+    const user = users.find((u) => u.id === decoded.userId)
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 401 })
+    }
+
     return NextResponse.json({
       success: true,
       user: {
-        id: decoded.userId,
-        email: decoded.email,
-        role: decoded.role,
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
       },
     })
   } catch (error) {
