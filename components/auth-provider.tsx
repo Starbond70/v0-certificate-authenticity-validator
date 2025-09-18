@@ -54,6 +54,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (response.ok) {
         setUser(data.user)
+        // Store the token in a cookie
+        document.cookie = `auth-token=${data.token}; path=/; max-age=86400;`
         return { success: true }
       } else {
         return { success: false, error: data.error }
@@ -75,6 +77,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (response.ok) {
         setUser(data.user)
+        // Store the token in a cookie
+        document.cookie = `auth-token=${data.token}; path=/; max-age=86400;`
         return { success: true }
       } else {
         return { success: false, error: data.error }
@@ -88,10 +92,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await fetch("/api/auth/logout", { method: "POST" })
       setUser(null)
+      // Remove the auth token cookie
+      document.cookie = "auth-token=; path=/; max-age=0;"
     } catch (error) {
       console.error("Logout error:", error)
-      // Still clear user state even if API call fails
+      // Still clear user state and cookie even if API call fails
       setUser(null)
+      document.cookie = "auth-token=; path=/; max-age=0;"
     }
   }
 
