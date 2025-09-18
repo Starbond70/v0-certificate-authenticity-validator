@@ -11,8 +11,9 @@ interface User {
 
 interface AuthContextType {
   user: User | null
-  login: (email: string, password: string) => Promise<void>
-  logout: () => void
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>
+  register: (name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>
+  logout: () => Promise<void>
   isLoading: boolean
 }
 
@@ -24,37 +25,77 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Check for existing session on mount
-    const savedUser = localStorage.getItem("easyauth-user")
-    if (savedUser) {
-      setUser(JSON.parse(savedUser))
-    }
-    setIsLoading(false)
+    checkAuthStatus()
   }, [])
 
-  const login = async (email: string, password: string) => {
-    setIsLoading(true)
-
-    // Mock authentication - replace with real API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    const mockUser: User = {
-      id: "1",
-      name: "John Doe",
-      email,
-      role: email.includes("admin") ? "admin" : "verifier",
+  const checkAuthStatus = async () => {
+    try {
+      const response = await fetch("/api/auth/verify")
+      if (response.ok) {
+        const data = await response.json()
+        setUser(data.user)
+      }
+    } catch (error) {
+      console.error("Auth check failed:", error)
+    } finally {
+      setIsLoading(false)
     }
-
-    setUser(mockUser)
-    localStorage.setItem("easyauth-user", JSON.stringify(mockUser))
-    setIsLoading(false)
   }
 
-  const logout = () => {
-    setUser(null)
-    localStorage.removeItem("easyauth-user")
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setUser(data.user)
+        return { success: true }
+      } else {
+        return { success: false, error: data.error }
+      }
+    } catch (error) {
+      return { success: false, error: "Network error" }
+    }
   }
 
-  return <AuthContext.Provider value={{ user, login, logout, isLoading }}>{children}</AuthContext.Provider>
+  const register = async (name: string, email: string, password: string) => {
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setUser(data.user)
+        return { success: true }
+      } else {
+        return { success: false, error: data.error }
+      }
+    } catch (error) {
+      return { success: false, error: "Network error" }
+    }
+  }
+
+  const logout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" })
+      setUser(null)
+    } catch (error) {
+      console.error("Logout error:", error)
+      // Still clear user state even if API call fails
+      setUser(null)
+    }
+  }
+
+  return <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

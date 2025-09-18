@@ -9,36 +9,50 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Shield, Mail, Lock, User, ArrowLeft } from "lucide-react"
+import { Shield, Mail, Lock, User, ArrowLeft, AlertCircle } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/components/auth-provider"
 
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [loginData, setLoginData] = useState({ email: "", password: "" })
+  const [signupData, setSignupData] = useState({ name: "", email: "", password: "" })
   const router = useRouter()
+  const { login, register } = useAuth()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError("")
 
-    // Mock authentication - replace with real auth logic
-    setTimeout(() => {
-      setIsLoading(false)
-      // Redirect based on user role (mock logic)
-      const isAdmin = Math.random() > 0.5
-      router.push(isAdmin ? "/admin" : "/verify")
-    }, 2000)
+    const result = await login(loginData.email, loginData.password)
+
+    if (result.success) {
+      // Redirect based on user role - middleware will handle this
+      router.push("/verify")
+    } else {
+      setError(result.error || "Login failed")
+    }
+
+    setIsLoading(false)
   }
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError("")
 
-    // Mock signup - replace with real auth logic
-    setTimeout(() => {
-      setIsLoading(false)
+    const result = await register(signupData.name, signupData.email, signupData.password)
+
+    if (result.success) {
       router.push("/verify")
-    }, 2000)
+    } else {
+      setError(result.error || "Registration failed")
+    }
+
+    setIsLoading(false)
   }
 
   return (
@@ -68,6 +82,13 @@ export default function AuthPage() {
             <CardDescription className="text-center">Sign in to your account or create a new one</CardDescription>
           </CardHeader>
           <CardContent>
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center">
+                <AlertCircle className="h-4 w-4 text-red-500 mr-2" />
+                <span className="text-red-700 text-sm">{error}</span>
+              </div>
+            )}
+
             <Tabs defaultValue="login" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="login">Login</TabsTrigger>
@@ -80,7 +101,15 @@ export default function AuthPage() {
                     <Label htmlFor="email">Email</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input id="email" type="email" placeholder="Enter your email" className="pl-10" required />
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="Enter your email"
+                        className="pl-10"
+                        required
+                        value={loginData.email}
+                        onChange={(e) => setLoginData((prev) => ({ ...prev, email: e.target.value }))}
+                      />
                     </div>
                   </div>
 
@@ -94,6 +123,8 @@ export default function AuthPage() {
                         placeholder="Enter your password"
                         className="pl-10"
                         required
+                        value={loginData.password}
+                        onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
                       />
                     </div>
                   </div>
@@ -110,7 +141,15 @@ export default function AuthPage() {
                     <Label htmlFor="name">Full Name</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input id="name" type="text" placeholder="Enter your full name" className="pl-10" required />
+                      <Input
+                        id="name"
+                        type="text"
+                        placeholder="Enter your full name"
+                        className="pl-10"
+                        required
+                        value={signupData.name}
+                        onChange={(e) => setSignupData((prev) => ({ ...prev, name: e.target.value }))}
+                      />
                     </div>
                   </div>
 
@@ -118,7 +157,15 @@ export default function AuthPage() {
                     <Label htmlFor="signup-email">Email</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input id="signup-email" type="email" placeholder="Enter your email" className="pl-10" required />
+                      <Input
+                        id="signup-email"
+                        type="email"
+                        placeholder="Enter your email"
+                        className="pl-10"
+                        required
+                        value={signupData.email}
+                        onChange={(e) => setSignupData((prev) => ({ ...prev, email: e.target.value }))}
+                      />
                     </div>
                   </div>
 
@@ -129,9 +176,12 @@ export default function AuthPage() {
                       <Input
                         id="signup-password"
                         type="password"
-                        placeholder="Create a password"
+                        placeholder="Create a password (min 6 characters)"
                         className="pl-10"
                         required
+                        minLength={6}
+                        value={signupData.password}
+                        onChange={(e) => setSignupData((prev) => ({ ...prev, password: e.target.value }))}
                       />
                     </div>
                   </div>
@@ -144,6 +194,12 @@ export default function AuthPage() {
             </Tabs>
           </CardContent>
         </Card>
+
+        <div className="mt-4 p-3 bg-muted/50 rounded-lg text-center">
+          <p className="text-sm text-muted-foreground mb-2">Demo Credentials:</p>
+          <p className="text-xs text-muted-foreground">Admin: admin@easyauth.com / password</p>
+          <p className="text-xs text-muted-foreground">User: user@easyauth.com / password</p>
+        </div>
       </motion.div>
     </div>
   )
