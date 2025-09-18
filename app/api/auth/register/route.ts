@@ -2,22 +2,8 @@ import { type NextRequest, NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
-const users: any[] = [
-  {
-    id: "1",
-    email: "admin@easyauth.com",
-    password: "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi", // password
-    name: "Admin User",
-    role: "admin",
-  },
-  {
-    id: "2",
-    email: "user@easyauth.com",
-    password: "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi", // password
-    name: "John Doe",
-    role: "verifier",
-  },
-]
+// Mock user database - replace with real database
+const users: any[] = []
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key"
 

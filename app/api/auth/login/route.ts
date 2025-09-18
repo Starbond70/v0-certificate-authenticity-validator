@@ -2,18 +2,19 @@ import { type NextRequest, NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
+// Mock user database - replace with real database
 const users = [
   {
     id: "1",
     email: "admin@easyauth.com",
-    password: "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi", // password
+    password: "test123", // password
     name: "Admin User",
     role: "admin",
   },
   {
     id: "2",
     email: "user@easyauth.com",
-    password: "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi", // password
+    password: "test123", // password
     name: "John Doe",
     role: "verifier",
   },
@@ -25,23 +26,17 @@ export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json()
 
-    console.log("[v0] Login attempt for:", email)
-
     // Find user by email
     const user = users.find((u) => u.email === email)
     if (!user) {
-      console.log("[v0] User not found:", email)
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
     }
 
     // Verify password
     const isValidPassword = await bcrypt.compare(password, user.password)
     if (!isValidPassword) {
-      console.log("[v0] Invalid password for:", email)
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
     }
-
-    console.log("[v0] Login successful for:", email)
 
     // Generate JWT token
     const token = jwt.sign({ userId: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: "24h" })
