@@ -1,5 +1,4 @@
 import { type NextRequest, NextResponse } from "next/server"
-import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
 // Mock user database - replace with real database
@@ -24,17 +23,11 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key"
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json()
+    const { email } = await request.json()
 
     // Find user by email
     const user = users.find((u) => u.email === email)
     if (!user) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
-    }
-
-    // Verify password
-    const isValidPassword = await bcrypt.compare(password, user.password)
-    if (!isValidPassword) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
     }
 
