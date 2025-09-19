@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { createContext, useContext, useState, type ReactNode } from "react"
 
 interface User {
   id: string
@@ -21,85 +21,53 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    // Check for existing session on mount
-    checkAuthStatus()
-  }, [])
-
-  const checkAuthStatus = async () => {
-    try {
-      const response = await fetch("/api/auth/verify")
-      if (response.ok) {
-        const data = await response.json()
-        setUser(data.user)
-      }
-    } catch (error) {
-      console.error("Auth check failed:", error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  const [isLoading, setIsLoading] = useState(false)
 
   const login = async (email: string, password: string) => {
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      })
+    setIsLoading(true)
 
-      const data = await response.json()
+    // Simulate loading delay
+    await new Promise((resolve) => setTimeout(resolve, 500))
 
-      if (response.ok) {
-        setUser(data.user)
-        // Store the token in a cookie
-        document.cookie = `auth-token=${data.token}; path=/; max-age=86400;`
-        return { success: true }
-      } else {
-        return { success: false, error: data.error }
-      }
-    } catch (error) {
-      return { success: false, error: "Network error" }
+    // Determine role based on email for demo purposes
+    const role = email.includes("admin") ? "admin" : "verifier"
+
+    // Auto-login with demo user data
+    const demoUser: User = {
+      id: "demo-" + Date.now(),
+      name: email.includes("admin") ? "Admin User" : "Demo User",
+      email: email,
+      role: role,
     }
+
+    setUser(demoUser)
+    setIsLoading(false)
+
+    return { success: true }
   }
 
   const register = async (name: string, email: string, password: string) => {
-    try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      })
+    setIsLoading(true)
 
-      const data = await response.json()
+    // Simulate loading delay
+    await new Promise((resolve) => setTimeout(resolve, 500))
 
-      if (response.ok) {
-        setUser(data.user)
-        // Store the token in a cookie
-        document.cookie = `auth-token=${data.token}; path=/; max-age=86400;`
-        return { success: true }
-      } else {
-        return { success: false, error: data.error }
-      }
-    } catch (error) {
-      return { success: false, error: "Network error" }
+    // Auto-register with provided data
+    const newUser: User = {
+      id: "demo-" + Date.now(),
+      name: name,
+      email: email,
+      role: "verifier", // Default role for new users
     }
+
+    setUser(newUser)
+    setIsLoading(false)
+
+    return { success: true }
   }
 
   const logout = async () => {
-    try {
-      await fetch("/api/auth/logout", { method: "POST" })
-      setUser(null)
-      // Remove the auth token cookie
-      document.cookie = "auth-token=; path=/; max-age=0;"
-    } catch (error) {
-      console.error("Logout error:", error)
-      // Still clear user state and cookie even if API call fails
-      setUser(null)
-      document.cookie = "auth-token=; path=/; max-age=0;"
-    }
+    setUser(null)
   }
 
   return <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>{children}</AuthContext.Provider>

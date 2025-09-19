@@ -9,14 +9,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Shield, Mail, Lock, User, ArrowLeft, AlertCircle } from "lucide-react"
+import { Shield, Mail, Lock, User, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/components/auth-provider"
 
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState("")
   const [loginData, setLoginData] = useState({ email: "", password: "" })
   const [signupData, setSignupData] = useState({ name: "", email: "", password: "" })
   const router = useRouter()
@@ -25,15 +24,14 @@ export default function AuthPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setError("")
 
-    const result = await login(loginData.email, loginData.password)
+    await login(loginData.email, loginData.password)
 
-    if (result.success) {
-      // Redirect based on user role - middleware will handle this
-      router.push("/verify")
+    // Redirect based on email for demo
+    if (loginData.email.includes("admin")) {
+      router.push("/admin")
     } else {
-      setError(result.error || "Login failed")
+      router.push("/verify")
     }
 
     setIsLoading(false)
@@ -42,15 +40,9 @@ export default function AuthPage() {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setError("")
 
-    const result = await register(signupData.name, signupData.email, signupData.password)
-
-    if (result.success) {
-      router.push("/verify")
-    } else {
-      setError(result.error || "Registration failed")
-    }
+    await register(signupData.name, signupData.email, signupData.password)
+    router.push("/verify")
 
     setIsLoading(false)
   }
@@ -82,13 +74,6 @@ export default function AuthPage() {
             <CardDescription className="text-center">Sign in to your account or create a new one</CardDescription>
           </CardHeader>
           <CardContent>
-            {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center">
-                <AlertCircle className="h-4 w-4 text-red-500 mr-2" />
-                <span className="text-red-700 text-sm">{error}</span>
-              </div>
-            )}
-
             <Tabs defaultValue="login" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="login">Login</TabsTrigger>
@@ -196,9 +181,9 @@ export default function AuthPage() {
         </Card>
 
         <div className="mt-4 p-3 bg-muted/50 rounded-lg text-center">
-          <p className="text-sm text-muted-foreground mb-2">Demo Credentials:</p>
-          <p className="text-xs text-muted-foreground">Admin: admin@easyauth.com / password</p>
-          <p className="text-xs text-muted-foreground">User: user@easyauth.com / password</p>
+          <p className="text-sm text-muted-foreground mb-2">Demo Mode - Any credentials work!</p>
+          <p className="text-xs text-muted-foreground">Use "admin@example.com" to access admin dashboard</p>
+          <p className="text-xs text-muted-foreground">Any other email goes to user verification page</p>
         </div>
       </motion.div>
     </div>
